@@ -7,16 +7,28 @@ public class DirtCleaner : MonoBehaviour
     [SerializeField] private Camera inputCamera;
     [SerializeField, Min(1)] private int brushRadiusPixels = 24;
 
+    [Header("Progress — runtime debug")]
+    [SerializeField, Range(0f, 100f)]
+    private float cleaningPercent;
+
     private SpriteRenderer dirtRenderer;
     private Sprite originalSprite;
     private Sprite workingSprite;
     private Texture2D workingTexture;
     private Color32[] pixels;
 
+    private int initialDirtyPixelCount;
+    private int cleanedPixelCount;
+
     private float pixelsPerUnit;
     private Vector2 pivotPixels;
     private Vector2 previousPixelPosition;
     private bool wasPressed;
+
+    public float CleaningProgress =>
+        initialDirtyPixelCount > 0
+            ? (float)cleanedPixelCount / initialDirtyPixelCount
+            : 0f;
 
     private void Awake()
     {
@@ -64,6 +76,25 @@ public class DirtCleaner : MonoBehaviour
         workingTexture.Apply(false);
 
         pixels = workingTexture.GetPixels32();
+
+        initialDirtyPixelCount = 0;
+        cleanedPixelCount = 0;
+        cleaningPercent = 0f;
+
+        foreach (Color32 pixel in pixels)
+        {
+            if (pixel.a > 0)
+                initialDirtyPixelCount++;
+        }
+
+        if (initialDirtyPixelCount == 0)
+        {
+            Debug.LogError(
+                "DirtCleaner: текстура грязи полностью прозрачная.", this);
+            enabled = false;
+            return;
+        }
+
         pixelsPerUnit = originalSprite.pixelsPerUnit;
         pivotPixels = originalSprite.pivot;
 
@@ -129,6 +160,8 @@ public class DirtCleaner : MonoBehaviour
         {
             workingTexture.SetPixels32(pixels);
             workingTexture.Apply(false);
+
+            cleaningPercent = CleaningProgress * 100f;
         }
 
         previousPixelPosition = pixelPosition;
@@ -186,6 +219,7 @@ public class DirtCleaner : MonoBehaviour
                     continue;
 
                 pixels[index].a = 0;
+                cleanedPixelCount++;
                 changed = true;
             }
         }
