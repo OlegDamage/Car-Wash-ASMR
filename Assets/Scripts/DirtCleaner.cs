@@ -1,5 +1,8 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(SpriteRenderer))]
 public class DirtCleaner : MonoBehaviour
@@ -30,6 +33,12 @@ public class DirtCleaner : MonoBehaviour
     private Vector2 pivotPixels;
     private Vector2 previousPixelPosition;
     private bool wasPressed;
+
+    private bool gestureActive;
+    private bool gestureStartedOverUI;
+
+    private readonly List<RaycastResult> uiHits =
+        new List<RaycastResult>();
 
     public float CleaningProgress =>
         initialDirtyPixelCount > 0
@@ -89,7 +98,7 @@ public class DirtCleaner : MonoBehaviour
         cleanedPixelCount = 0;
         cleaningPercent = 0f;
         isCompleted = false;
-        wasPressed = false;
+        ResetGesture();
 
         foreach (Color32 pixel in pixels)
         {
@@ -129,6 +138,18 @@ public class DirtCleaner : MonoBehaviour
             return;
 
         if (!TryGetPointer(out Vector2 screenPosition))
+        {
+            ResetGesture();
+            return;
+        }
+
+        if (!gestureActive)
+        {
+            gestureActive = true;
+            gestureStartedOverUI = IsOverUI(screenPosition);
+        }
+
+        if (gestureStartedOverUI)
         {
             wasPressed = false;
             return;
@@ -185,6 +206,30 @@ public class DirtCleaner : MonoBehaviour
 
         previousPixelPosition = pixelPosition;
         wasPressed = !isCompleted;
+    }
+
+    private bool IsOverUI(Vector2 screenPosition)
+    {
+        EventSystem eventSystem = EventSystem.current;
+
+        if (eventSystem == null)
+            return false;
+
+        PointerEventData pointerData =
+            new PointerEventData(eventSystem);
+
+        pointerData.position = screenPosition;
+
+        uiHits.Clear();
+        eventSystem.RaycastAll(pointerData, uiHits);
+
+        foreach (RaycastResult hit in uiHits)
+        {
+            if (hit.module is GraphicRaycaster)
+                return true;
+        }
+
+        return false;
     }
 
     private bool TryGetPointer(out Vector2 position)
@@ -257,14 +302,33 @@ public class DirtCleaner : MonoBehaviour
         cleanedPixelCount = initialDirtyPixelCount;
         cleaningPercent = 100f;
         isCompleted = true;
-        wasPressed = false;
+        ResetGesture();
 
         Debug.Log("DirtCleaner: очистка завершена.", this);
     }
 
-    private void OnDisable()
+    private void ResetGesture()
     {
         wasPressed = false;
+        gestureActive = false;
+        gestureStartedOverUI = false;
+    }
+
+    private void OnApplicationFocus(bool focus)
+    {
+        if (!focus)
+            ResetGesture();
+    }
+
+    private void OnApplicationPause(bool paused)
+    {
+        if (paused)
+            ResetGesture();
+    }
+
+    private void OnDisable()
+    {
+        ResetGesture();
     }
 
     private void OnDestroy()
