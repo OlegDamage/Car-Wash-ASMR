@@ -129,6 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1280103696}
   - component: {fileID: 1280103695}
+  - component: {fileID: 1280103697}
   m_Layer: 0
   m_Name: CarDirt
   m_TagString: Untagged
@@ -210,6 +211,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1280103697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1280103694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 013873f5e0048aa42a79b639827e2b1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DirtCleaner
+  inputCamera: {fileID: 1944258207}
+  brushRadiusPixels: 24
 --- !u!1 &1944258205
 GameObject:
   m_ObjectHideFlags: 0
@@ -221,6 +236,7 @@ GameObject:
   - component: {fileID: 1944258208}
   - component: {fileID: 1944258207}
   - component: {fileID: 1944258206}
+  - component: {fileID: 1944258209}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -302,6 +318,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1944258209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1944258205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dda60b9a5b264884ba52a4bad3b18fe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraWidthFit
+  referenceOrthographicSize: 8
+  referenceAspect: 0.5625
 --- !u!1 &2096802270
 GameObject:
   m_ObjectHideFlags: 0
