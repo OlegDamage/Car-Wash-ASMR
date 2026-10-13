@@ -7,9 +7,15 @@ public class DirtCleaner : MonoBehaviour
     [SerializeField] private Camera inputCamera;
     [SerializeField, Min(1)] private int brushRadiusPixels = 24;
 
+    [Header("Completion")]
+    [SerializeField, Range(1f, 100f)]
+    private float completionThresholdPercent = 95f;
+
     [Header("Progress — runtime debug")]
     [SerializeField, Range(0f, 100f)]
     private float cleaningPercent;
+
+    [SerializeField] private bool isCompleted;
 
     private SpriteRenderer dirtRenderer;
     private Sprite originalSprite;
@@ -29,6 +35,8 @@ public class DirtCleaner : MonoBehaviour
         initialDirtyPixelCount > 0
             ? (float)cleanedPixelCount / initialDirtyPixelCount
             : 0f;
+
+    public bool IsCompleted => isCompleted;
 
     private void Awake()
     {
@@ -80,6 +88,8 @@ public class DirtCleaner : MonoBehaviour
         initialDirtyPixelCount = 0;
         cleanedPixelCount = 0;
         cleaningPercent = 0f;
+        isCompleted = false;
+        wasPressed = false;
 
         foreach (Color32 pixel in pixels)
         {
@@ -115,6 +125,9 @@ public class DirtCleaner : MonoBehaviour
 
     private void Update()
     {
+        if (isCompleted)
+            return;
+
         if (!TryGetPointer(out Vector2 screenPosition))
         {
             wasPressed = false;
@@ -158,14 +171,20 @@ public class DirtCleaner : MonoBehaviour
 
         if (changed)
         {
+            cleaningPercent = CleaningProgress * 100f;
+
+            float threshold = Mathf.Clamp(
+                completionThresholdPercent, 1f, 100f);
+
+            if (cleaningPercent >= threshold)
+                CompleteCleaning();
+
             workingTexture.SetPixels32(pixels);
             workingTexture.Apply(false);
-
-            cleaningPercent = CleaningProgress * 100f;
         }
 
         previousPixelPosition = pixelPosition;
-        wasPressed = true;
+        wasPressed = !isCompleted;
     }
 
     private bool TryGetPointer(out Vector2 position)
@@ -225,6 +244,22 @@ public class DirtCleaner : MonoBehaviour
         }
 
         return changed;
+    }
+
+    private void CompleteCleaning()
+    {
+        if (isCompleted)
+            return;
+
+        for (int i = 0; i < pixels.Length; i++)
+            pixels[i].a = 0;
+
+        cleanedPixelCount = initialDirtyPixelCount;
+        cleaningPercent = 100f;
+        isCompleted = true;
+        wasPressed = false;
+
+        Debug.Log("DirtCleaner: очистка завершена.", this);
     }
 
     private void OnDisable()
