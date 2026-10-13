@@ -240,6 +240,7 @@ GameObject:
   - component: {fileID: 1944258207}
   - component: {fileID: 1944258206}
   - component: {fileID: 1944258209}
+  - component: {fileID: 1944258210}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -335,6 +336,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraWidthFit
   referenceOrthographicSize: 8
   referenceAspect: 0.5625
+--- !u!114 &1944258210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1944258205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 395d2510b7c796a4497de2b996aa5522, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LevelRestart
 --- !u!1 &2096802270
 GameObject:
   m_ObjectHideFlags: 0
