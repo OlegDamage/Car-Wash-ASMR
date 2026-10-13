@@ -10,6 +10,13 @@ public class DirtCleaner : MonoBehaviour
     [SerializeField] private Camera inputCamera;
     [SerializeField, Min(1)] private int brushRadiusPixels = 24;
 
+    [Header("Soft brush")]
+    [SerializeField, Range(0.05f, 1f)]
+    private float softEdgeFraction = 0.35f;
+
+    [SerializeField, Min(0.1f)]
+    private float cleaningStrengthPerSecond = 4f;
+
     [Header("Completion")]
     [SerializeField, Range(1f, 100f)]
     private float completionThresholdPercent = 95f;
@@ -25,9 +32,10 @@ public class DirtCleaner : MonoBehaviour
     private Sprite workingSprite;
     private Texture2D workingTexture;
     private Color32[] pixels;
+    private float[] alphaValues;
 
-    private int initialDirtyPixelCount;
-    private int cleanedPixelCount;
+    private long initialAlphaSum;
+    private long removedAlphaSum;
 
     private float pixelsPerUnit;
     private Vector2 pivotPixels;
@@ -41,8 +49,8 @@ public class DirtCleaner : MonoBehaviour
         new List<RaycastResult>();
 
     public float CleaningProgress =>
-        initialDirtyPixelCount > 0
-            ? (float)cleanedPixelCount / initialDirtyPixelCount
+        initialAlphaSum > 0
+            ? (float)((double)removedAlphaSum / initialAlphaSum)
             : 0f;
 
     public bool IsCompleted => isCompleted;
@@ -93,20 +101,21 @@ public class DirtCleaner : MonoBehaviour
         workingTexture.Apply(false);
 
         pixels = workingTexture.GetPixels32();
+        alphaValues = new float[pixels.Length];
 
-        initialDirtyPixelCount = 0;
-        cleanedPixelCount = 0;
+        initialAlphaSum = 0;
+        removedAlphaSum = 0;
         cleaningPercent = 0f;
         isCompleted = false;
         ResetGesture();
 
-        foreach (Color32 pixel in pixels)
+        for (int i = 0; i < pixels.Length; i++)
         {
-            if (pixel.a > 0)
-                initialDirtyPixelCount++;
+            alphaValues[i] = pixels[i].a;
+            initialAlphaSum += pixels[i].a;
         }
 
-        if (initialDirtyPixelCount == 0)
+        if (initialAlphaSum == 0)
         {
             Debug.LogError(
                 "DirtCleaner: текстура грязи полностью прозрачная.", this);
@@ -175,19 +184,27 @@ public class DirtCleaner : MonoBehaviour
             ? previousPixelPosition
             : pixelPosition;
 
-        float spacing = Mathf.Max(1f, brushRadiusPixels * 0.5f);
-        int steps = Mathf.Max(
-            1,
-            Mathf.CeilToInt(Vector2.Distance(start, pixelPosition) / spacing));
+        float strokeLength = Vector2.Distance(start, pixelPosition);
+        float spacing = Mathf.Max(1f, brushRadiusPixels * 0.25f);
+
+        int sampleCount = wasPressed && strokeLength > 0.01f
+            ? Mathf.Max(1, Mathf.CeilToInt(strokeLength / spacing))
+            : 1;
+
+        float alphaAmount =
+            255f * Mathf.Max(0.1f, cleaningStrengthPerSecond)
+            * Time.deltaTime / sampleCount;
 
         bool changed = false;
 
-        for (int i = 0; i <= steps; i++)
+        for (int i = 0; i < sampleCount; i++)
         {
-            Vector2 point = Vector2.Lerp(
-                start, pixelPosition, (float)i / steps);
+            float t = sampleCount == 1
+                ? 1f
+                : (i + 0.5f) / sampleCount;
 
-            changed |= EraseCircle(point);
+            Vector2 point = Vector2.Lerp(start, pixelPosition, t);
+            changed |= EraseCircle(point, alphaAmount);
         }
 
         if (changed)
@@ -253,7 +270,7 @@ public class DirtCleaner : MonoBehaviour
         return false;
     }
 
-    private bool EraseCircle(Vector2 center)
+    private bool EraseCircle(Vector2 center, float alphaAmount)
     {
         int radius = Mathf.Max(1, brushRadiusPixels);
         int width = workingTexture.width;
@@ -265,6 +282,9 @@ public class DirtCleaner : MonoBehaviour
         int maxY = Mathf.Min(height - 1, Mathf.CeilToInt(center.y + radius));
 
         float radiusSquared = radius * radius;
+        float softness = Mathf.Clamp(softEdgeFraction, 0.05f, 1f);
+        float innerRadius = radius * (1f - softness);
+
         bool changed = false;
 
         for (int y = minY; y <= maxY; y++)
@@ -273,17 +293,36 @@ public class DirtCleaner : MonoBehaviour
             {
                 float dx = x + 0.5f - center.x;
                 float dy = y + 0.5f - center.y;
+                float distanceSquared = dx * dx + dy * dy;
 
-                if (dx * dx + dy * dy > radiusSquared)
+                if (distanceSquared >= radiusSquared)
                     continue;
 
                 int index = y * width + x;
+                byte oldAlpha = pixels[index].a;
 
-                if (pixels[index].a == 0)
+                if (oldAlpha == 0)
                     continue;
 
-                pixels[index].a = 0;
-                cleanedPixelCount++;
+                float distance = Mathf.Sqrt(distanceSquared);
+                float edgePosition = Mathf.InverseLerp(
+                    innerRadius, radius, distance);
+
+                float weight =
+                    1f - Mathf.SmoothStep(0f, 1f, edgePosition);
+
+                alphaValues[index] = Mathf.Max(
+                    0f,
+                    alphaValues[index] - alphaAmount * weight);
+
+                byte newAlpha =
+                    (byte)Mathf.RoundToInt(alphaValues[index]);
+
+                if (newAlpha == oldAlpha)
+                    continue;
+
+                pixels[index].a = newAlpha;
+                removedAlphaSum += oldAlpha - newAlpha;
                 changed = true;
             }
         }
@@ -297,9 +336,12 @@ public class DirtCleaner : MonoBehaviour
             return;
 
         for (int i = 0; i < pixels.Length; i++)
+        {
             pixels[i].a = 0;
+            alphaValues[i] = 0f;
+        }
 
-        cleanedPixelCount = initialDirtyPixelCount;
+        removedAlphaSum = initialAlphaSum;
         cleaningPercent = 100f;
         isCompleted = true;
         ResetGesture();
