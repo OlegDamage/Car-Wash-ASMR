@@ -1153,7 +1153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DirtCleaner
   inputCamera: {fileID: 1944258207}
-  brushRadiusPixels: 24
+  brushRadiusPixels: 28
   softEdgeFraction: 0.35
   cleaningStrengthPerSecond: 6
   completionThresholdPercent: 98
