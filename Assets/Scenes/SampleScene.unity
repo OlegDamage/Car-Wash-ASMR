@@ -1490,7 +1490,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1280103695
 SpriteRenderer:
   serializedVersion: 2
@@ -1980,7 +1980,7 @@ MonoBehaviour:
   dirtCleaner: {fileID: 1280103697}
   nextButton: {fileID: 373767042}
   cars:
-  - cleanSprite: {fileID: 21300000, guid: e1ede6802afb5104fab7ffbec8d60c90, type: 3}
+  - cleanSprite: {fileID: 21300000, guid: 1301682c9a74cec4cba17af673b31b3b, type: 3}
     dirtSprite: {fileID: 21300000, guid: 0f57cc4d77df47f43b7000ec2b28752c, type: 3}
   - cleanSprite: {fileID: 21300000, guid: 9537332372e067f44a6b3de19e67e0a8, type: 3}
     dirtSprite: {fileID: 21300000, guid: 9d39d36eb2c833f498c13d21dc70f0c4, type: 3}
@@ -2306,7 +2306,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: e1ede6802afb5104fab7ffbec8d60c90, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1301682c9a74cec4cba17af673b31b3b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
