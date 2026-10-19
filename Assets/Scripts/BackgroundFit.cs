@@ -5,6 +5,7 @@
 public class BackgroundFit : MonoBehaviour
 {
     [SerializeField] private Camera targetCamera;
+    [SerializeField] private float correctY;
 
     private SpriteRenderer backgroundRenderer;
 
@@ -52,7 +53,7 @@ public class BackgroundFit : MonoBehaviour
 
         transform.position = new Vector3(
             cameraPosition.x,
-            cameraPosition.y,
+            cameraPosition.y + correctY,
             transform.position.z);
     }
 }

@@ -271,7 +271,7 @@ PlayerSettings:
   AndroidAllowedArchitectures: -13
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: C:/Users/Aleh Vozny/Projects/Unity/AnvumiGames_Private/AndroidKeys/carwashasmr-upload.keystore
+  AndroidKeystoreName: E:/Projects/AnvumiGames_Private/AndroidKeys/carwashasmr-upload.keystore
   AndroidKeyaliasName: carwashasmr-upload
   AndroidEnableArmv9SecurityFeatures: 0
   AndroidEnableArm64MTE: 0

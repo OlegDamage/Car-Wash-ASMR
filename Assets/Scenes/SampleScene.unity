@@ -1490,7 +1490,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &1280103695
 SpriteRenderer:
   serializedVersion: 2
@@ -1540,7 +1540,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 0f57cc4d77df47f43b7000ec2b28752c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: dd949245dca575c4fa39db6ef12037c1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1981,7 +1981,7 @@ MonoBehaviour:
   nextButton: {fileID: 373767042}
   cars:
   - cleanSprite: {fileID: 21300000, guid: 1301682c9a74cec4cba17af673b31b3b, type: 3}
-    dirtSprite: {fileID: 21300000, guid: 0f57cc4d77df47f43b7000ec2b28752c, type: 3}
+    dirtSprite: {fileID: 21300000, guid: dd949245dca575c4fa39db6ef12037c1, type: 3}
   - cleanSprite: {fileID: 21300000, guid: 9537332372e067f44a6b3de19e67e0a8, type: 3}
     dirtSprite: {fileID: 21300000, guid: 9d39d36eb2c833f498c13d21dc70f0c4, type: 3}
 --- !u!1 &2028671194
@@ -2202,7 +2202,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -10
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: cdebd1a34a043c2459a74e314b5414d2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 50f457ebc18c10a4baaf36f178487f43, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -2240,6 +2240,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BackgroundFit
   targetCamera: {fileID: 1944258207}
+  correctY: -0.7
 --- !u!1 &2096802270
 GameObject:
   m_ObjectHideFlags: 0
