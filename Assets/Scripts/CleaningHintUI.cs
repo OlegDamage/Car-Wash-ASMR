@@ -40,8 +40,16 @@ public class CleaningHintUI : MonoBehaviour
 
     private void RefreshHint()
     {
-        int state = !dirtCleaner.isActiveAndEnabled
-            ? 1 : (dirtCleaner.IsCompleted ? 2 : 0);
+        int state;
+        if (!dirtCleaner.isActiveAndEnabled)
+            state = 1;
+        else if (dirtCleaner.IsCompleted)
+            state = 2;
+        else if (dirtCleaner.CleaningProgress > 0f)
+            state = 1;
+        else
+            state = 0;
+
         if (state == displayedState)
             return;
 
