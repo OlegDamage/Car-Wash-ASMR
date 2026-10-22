@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -7,8 +7,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(LevelRestart))]
 public class CarSequence : MonoBehaviour
 {
-    private const string CurrentCarKey =
-        "CarWashASMR.CurrentCarIndex";
+    private const string CurrentCarKey = "CarWashASMR.CurrentCarIndex";
 
     [Serializable]
     private class CarPair
@@ -24,85 +23,87 @@ public class CarSequence : MonoBehaviour
     [SerializeField] private CarPair[] cars;
 
     private LevelRestart levelRestart;
+    private CanvasGroup nextGroup;
     private int currentCarIndex;
     private bool transitionRequested;
 
     private void Awake()
     {
         if (nextButton != null)
-            nextButton.interactable = false;
-
-        if (cleanRenderer == null ||
-            dirtRenderer == null ||
-            dirtCleaner == null ||
-            nextButton == null ||
-            cars == null ||
-            cars.Length == 0)
         {
-            Debug.LogError(
-                "CarSequence: назначь компоненты и пары машин.", this);
+            nextGroup = nextButton.GetComponent<CanvasGroup>();
+            if (nextGroup == null)
+                nextGroup = nextButton.gameObject.AddComponent<CanvasGroup>();
+            SetNextVisible(false);
+        }
+
+        if (cleanRenderer == null || dirtRenderer == null ||
+            dirtCleaner == null || nextButton == null ||
+            cars == null || cars.Length == 0)
+        {
+            Debug.LogError("CarSequence: назначь компоненты и пары машин.", this);
             enabled = false;
             return;
         }
 
         for (int i = 0; i < cars.Length; i++)
         {
-            if (cars[i] == null ||
-                cars[i].cleanSprite == null ||
+            if (cars[i] == null || cars[i].cleanSprite == null ||
                 cars[i].dirtSprite == null)
             {
-                Debug.LogError(
-                    $"CarSequence: не заполнена пара машины {i}.", this);
+                Debug.LogError($"CarSequence: не заполнена пара машины {i}.", this);
                 enabled = false;
                 return;
             }
         }
 
         levelRestart = GetComponent<LevelRestart>();
-
         currentCarIndex = Mathf.Clamp(
-            PlayerPrefs.GetInt(CurrentCarKey, 0),
-            0,
-            cars.Length - 1);
-
+            PlayerPrefs.GetInt(CurrentCarKey, 0), 0, cars.Length - 1);
         cleanRenderer.sprite = cars[currentCarIndex].cleanSprite;
         dirtRenderer.sprite = cars[currentCarIndex].dirtSprite;
     }
 
     private void LateUpdate()
     {
-        nextButton.interactable =
-            dirtCleaner.IsCompleted && !transitionRequested;
+        SetNextVisible(dirtCleaner.isActiveAndEnabled &&
+            dirtCleaner.IsCompleted && !transitionRequested);
+    }
+
+    private void SetNextVisible(bool visible)
+    {
+        if (nextButton != null)
+            nextButton.interactable = visible;
+        if (nextGroup == null)
+            return;
+        nextGroup.alpha = visible ? 1f : 0f;
+        nextGroup.interactable = visible;
+        nextGroup.blocksRaycasts = visible;
     }
 
     public void NextCar()
     {
-        if (!enabled ||
-            transitionRequested ||
-            !dirtCleaner.IsCompleted)
-        {
+        if (!enabled || transitionRequested || !dirtCleaner.IsCompleted)
             return;
-        }
 
         Scene scene = SceneManager.GetActiveScene();
-
         if (string.IsNullOrEmpty(scene.path) ||
             !Application.CanStreamedLevelBeLoaded(scene.path))
         {
-            Debug.LogError(
-                "CarSequence: текущая сцена отсутствует в Scene List.",
-                this);
+            Debug.LogError("CarSequence: текущая сцена отсутствует в Scene List.", this);
             return;
         }
 
         transitionRequested = true;
-        nextButton.interactable = false;
-
+        SetNextVisible(false);
         int nextIndex = (currentCarIndex + 1) % cars.Length;
-
         PlayerPrefs.SetInt(CurrentCarKey, nextIndex);
         PlayerPrefs.Save();
-
         levelRestart.RestartLevel();
+    }
+
+    private void OnDisable()
+    {
+        SetNextVisible(false);
     }
 }
