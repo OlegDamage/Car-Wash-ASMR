@@ -1,4 +1,4 @@
-﻿using TMPro;
+using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(TextMeshProUGUI))]
@@ -16,10 +16,7 @@ public class CleaningHintUI : MonoBehaviour
 
         if (dirtCleaner == null)
         {
-            Debug.LogError(
-                "CleaningHintUI: назначь DirtCleaner с объекта CarDirt.",
-                this);
-
+            Debug.LogError("CleaningHintUI: назначь DirtCleaner с объекта CarDirt.", this);
             hintLabel.enabled = false;
             enabled = false;
         }
@@ -32,7 +29,8 @@ public class CleaningHintUI : MonoBehaviour
 
     private void Start()
     {
-        RefreshHint();
+        if (enabled)
+            RefreshHint();
     }
 
     private void LateUpdate()
@@ -42,22 +40,12 @@ public class CleaningHintUI : MonoBehaviour
 
     private void RefreshHint()
     {
-        int state;
-
-        if (!dirtCleaner.isActiveAndEnabled)
-            state = 1;
-        else if (dirtCleaner.IsCompleted)
-            state = 2;
-        else if (dirtCleaner.CleaningProgress > 0f)
-            state = 1;
-        else
-            state = 0;
-
+        int state = !dirtCleaner.isActiveAndEnabled
+            ? 1 : (dirtCleaner.IsCompleted ? 2 : 0);
         if (state == displayedState)
             return;
 
         displayedState = state;
-
         if (state == 1)
         {
             hintLabel.enabled = false;
@@ -65,9 +53,7 @@ public class CleaningHintUI : MonoBehaviour
         }
 
         hintLabel.text = state == 2
-            ? "Hold Before to compare"
-            : "Drag on the car to clean";
-
+            ? "Hold Before to compare" : "Swipe to clean";
         hintLabel.enabled = true;
     }
 
