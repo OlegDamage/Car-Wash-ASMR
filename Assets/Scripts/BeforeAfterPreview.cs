@@ -1,19 +1,18 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [DefaultExecutionOrder(-50)]
 [RequireComponent(typeof(Button))]
 public class BeforeAfterPreview : MonoBehaviour,
-    IPointerDownHandler,
-    IPointerUpHandler,
-    IPointerExitHandler
+    IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
 {
     [SerializeField] private DirtCleaner dirtCleaner;
     [SerializeField] private SpriteRenderer sourceDirtRenderer;
     [SerializeField] private SpriteRenderer previewRenderer;
 
     private Button previewButton;
+    private CanvasGroup previewGroup;
     private bool initialized;
     private bool holding;
     private int holdingPointerId;
@@ -21,35 +20,30 @@ public class BeforeAfterPreview : MonoBehaviour,
     private void Awake()
     {
         previewButton = GetComponent<Button>();
-        previewButton.interactable = false;
+        previewGroup = GetComponent<CanvasGroup>();
+        if (previewGroup == null)
+            previewGroup = gameObject.AddComponent<CanvasGroup>();
+        SetButtonVisible(false);
         HidePreview();
 
-        if (dirtCleaner == null ||
-            sourceDirtRenderer == null ||
-            previewRenderer == null ||
-            sourceDirtRenderer == previewRenderer ||
+        if (dirtCleaner == null || sourceDirtRenderer == null ||
+            previewRenderer == null || sourceDirtRenderer == previewRenderer ||
             sourceDirtRenderer.sprite == null)
         {
             Debug.LogError(
                 "BeforeAfterPreview: назначь DirtCleaner, " +
-                "исходный SpriteRenderer и отдельный слой сравнения.",
-                this);
-
+                "исходный SpriteRenderer и отдельный слой сравнения.", this);
             enabled = false;
             return;
         }
 
         previewRenderer.sprite = sourceDirtRenderer.sprite;
-        previewRenderer.sharedMaterial =
-            sourceDirtRenderer.sharedMaterial;
+        previewRenderer.sharedMaterial = sourceDirtRenderer.sharedMaterial;
         previewRenderer.color = sourceDirtRenderer.color;
         previewRenderer.flipX = sourceDirtRenderer.flipX;
         previewRenderer.flipY = sourceDirtRenderer.flipY;
-        previewRenderer.sortingLayerID =
-            sourceDirtRenderer.sortingLayerID;
-        previewRenderer.sortingOrder =
-            sourceDirtRenderer.sortingOrder + 1;
-
+        previewRenderer.sortingLayerID = sourceDirtRenderer.sortingLayerID;
+        previewRenderer.sortingOrder = sourceDirtRenderer.sortingOrder + 1;
         initialized = true;
     }
 
@@ -58,27 +52,29 @@ public class BeforeAfterPreview : MonoBehaviour,
         if (!initialized)
             return;
 
-        bool canPreview =
-            dirtCleaner.isActiveAndEnabled &&
-            dirtCleaner.IsCompleted;
-
-        previewButton.interactable = canPreview;
-
+        bool canPreview = dirtCleaner.isActiveAndEnabled && dirtCleaner.IsCompleted;
+        SetButtonVisible(canPreview);
         if (!canPreview)
             HidePreview();
     }
 
+    private void SetButtonVisible(bool visible)
+    {
+        if (previewButton != null)
+            previewButton.interactable = visible;
+        if (previewGroup == null)
+            return;
+        previewGroup.alpha = visible ? 1f : 0f;
+        previewGroup.interactable = visible;
+        previewGroup.blocksRaycasts = visible;
+    }
+
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (!initialized ||
-            !isActiveAndEnabled ||
-            holding ||
+        if (!initialized || !isActiveAndEnabled || holding ||
             eventData.button != PointerEventData.InputButton.Left ||
-            !previewButton.IsInteractable() ||
-            !dirtCleaner.IsCompleted)
-        {
+            !previewButton.IsInteractable() || !dirtCleaner.IsCompleted)
             return;
-        }
 
         holding = true;
         holdingPointerId = eventData.pointerId;
@@ -100,7 +96,6 @@ public class BeforeAfterPreview : MonoBehaviour,
     private void HidePreview()
     {
         holding = false;
-
         if (previewRenderer != null)
             previewRenderer.enabled = false;
     }
@@ -120,8 +115,6 @@ public class BeforeAfterPreview : MonoBehaviour,
     private void OnDisable()
     {
         HidePreview();
-
-        if (previewButton != null)
-            previewButton.interactable = false;
+        SetButtonVisible(false);
     }
 }

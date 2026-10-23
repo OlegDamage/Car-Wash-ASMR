@@ -1,0 +1,936 @@
+fileFormatVersion: 2
+guid: 3dcff107403f52c4ea450d533e9d7c0b
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7628287729480270791
+    second: ui_button_background_long_0
+  - first:
+      213: -8681002637868466154
+    second: ui_button_background_long_1
+  - first:
+      213: -1008219566433778061
+    second: ui_button_background_long_2
+  - first:
+      213: -5511798551791251897
+    second: ui_button_background_long_3
+  - first:
+      213: -4883530760113719980
+    second: ui_button_background_long_4
+  - first:
+      213: 4096888843282157602
+    second: ui_button_background_long_5
+  - first:
+      213: 2491372978414729961
+    second: ui_button_background_long_6
+  - first:
+      213: -1950601280056193080
+    second: ui_button_background_long_7
+  - first:
+      213: -8532453111249040562
+    second: ui_button_background_long_8
+  - first:
+      213: -7267091219973659796
+    second: ui_button_background_long_9
+  - first:
+      213: 5890785614773828090
+    second: ui_button_background_long_10
+  - first:
+      213: 2202668665949027637
+    second: ui_button_background_long_11
+  - first:
+      213: -7890369732650102671
+    second: ui_button_background_long_12
+  - first:
+      213: -4290104536346913240
+    second: ui_button_background_long_13
+  - first:
+      213: 2342129375492248695
+    second: ui_button_background_long_14
+  - first:
+      213: -1157474727719033285
+    second: ui_button_background_long_15
+  - first:
+      213: -3397501340876418649
+    second: ui_button_background_long_16
+  - first:
+      213: -813852584901183384
+    second: ui_button_background_long_17
+  - first:
+      213: -2338543262494712287
+    second: ui_button_background_long_18
+  - first:
+      213: 2526496079839327635
+    second: ui_button_background_long_19
+  - first:
+      213: -2971568193144310445
+    second: ui_button_background_long_20
+  - first:
+      213: 5865608006483383222
+    second: ui_button_background_long_21
+  - first:
+      213: -2059430601335584023
+    second: ui_button_background_long_22
+  - first:
+      213: 2549917785031459965
+    second: ui_button_background_long_23
+  - first:
+      213: -3315483569840181346
+    second: ui_button_background_long_24
+  - first:
+      213: -5604451901822101564
+    second: ui_button_background_long_25
+  - first:
+      213: 3335963318909613617
+    second: ui_button_background_long_26
+  - first:
+      213: -3244916943821589961
+    second: ui_button_background_long_27
+  - first:
+      213: 5207918742552943128
+    second: ui_button_background_long_28
+  - first:
+      213: 8407353755897831208
+    second: ui_button_background_long_29
+  - first:
+      213: 6916617997915081793
+    second: ui_button_background_long_30
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ui_button_background_long_0
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 1174
+        width: 64
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93c7bd7f9b0e22690800000000000000
+      internalID: -7628287729480270791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_1
+      rect:
+        serializedVersion: 2
+        x: 235
+        y: 1174
+        width: 30
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6100f934812e68780800000000000000
+      internalID: -8681002637868466154
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_2
+      rect:
+        serializedVersion: 2
+        x: 347
+        y: 1223
+        width: 24
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 376cd1765a51202f0800000000000000
+      internalID: -1008219566433778061
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_3
+      rect:
+        serializedVersion: 2
+        x: 743
+        y: 1246
+        width: 16
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74e48fe7b682283b0800000000000000
+      internalID: -5511798551791251897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_4
+      rect:
+        serializedVersion: 2
+        x: 836
+        y: 1085
+        width: 73
+        height: 121
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4557ab1d5a63a3cb0800000000000000
+      internalID: -4883530760113719980
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_5
+      rect:
+        serializedVersion: 2
+        x: 1091
+        y: 1140
+        width: 72
+        height: 76
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 220181c52b21bd830800000000000000
+      internalID: 4096888843282157602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_6
+      rect:
+        serializedVersion: 2
+        x: 1398
+        y: 1174
+        width: 64
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9eaba652682239220800000000000000
+      internalID: 2491372978414729961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_7
+      rect:
+        serializedVersion: 2
+        x: 1646
+        y: 1167
+        width: 85
+        height: 87
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8cf04d378721ee4e0800000000000000
+      internalID: -1950601280056193080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_8
+      rect:
+        serializedVersion: 2
+        x: 1845
+        y: 1085
+        width: 17
+        height: 121
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e4b03592a13a69980800000000000000
+      internalID: -8532453111249040562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_9
+      rect:
+        serializedVersion: 2
+        x: 2120
+        y: 1140
+        width: 262
+        height: 76
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c632c13c90b162b90800000000000000
+      internalID: -7267091219973659796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_10
+      rect:
+        serializedVersion: 2
+        x: 2408
+        y: 1140
+        width: 39
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af933905e4640c150800000000000000
+      internalID: 5890785614773828090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_11
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 2489
+        height: 1136
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53d76cf3b73719e10800000000000000
+      internalID: 2202668665949027637
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1060
+        width: 100
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17095ea7886cf7290800000000000000
+      internalID: -7890369732650102671
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_13
+      rect:
+        serializedVersion: 2
+        x: 1157
+        y: 1097
+        width: 14
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82610c577ac7674c0800000000000000
+      internalID: -4290104536346913240
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_14
+      rect:
+        serializedVersion: 2
+        x: 2372
+        y: 1094
+        width: 27
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7741934024ae08020800000000000000
+      internalID: 2342129375492248695
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_15
+      rect:
+        serializedVersion: 2
+        x: 2441
+        y: 1094
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b36a0d12ed2dfefe0800000000000000
+      internalID: -1157474727719033285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_16
+      rect:
+        serializedVersion: 2
+        x: 2184
+        y: 1085
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a1d52df786a9d0d0800000000000000
+      internalID: -3397501340876418649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_17
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 1064
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8687e61d26d94b4f0800000000000000
+      internalID: -813852584901183384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_18
+      rect:
+        serializedVersion: 2
+        x: 2386
+        y: 1060
+        width: 23
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12e9e1bfa43db8fd0800000000000000
+      internalID: -2338543262494712287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_19
+      rect:
+        serializedVersion: 2
+        x: 2448
+        y: 1060
+        width: 12
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3957d357ccaef0320800000000000000
+      internalID: 2526496079839327635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_20
+      rect:
+        serializedVersion: 2
+        x: 2359
+        y: 407
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 355b8cde87ed2c6d0800000000000000
+      internalID: -2971568193144310445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_21
+      rect:
+        serializedVersion: 2
+        x: 2449
+        y: 401
+        width: 59
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b311229763d66150800000000000000
+      internalID: 5865608006483383222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_22
+      rect:
+        serializedVersion: 2
+        x: 2359
+        y: 175
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9eac2d787ce6b63e0800000000000000
+      internalID: -2059430601335584023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_23
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 154
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d74404727b0236320800000000000000
+      internalID: 2549917785031459965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_24
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 150
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9f280962490df1d0800000000000000
+      internalID: -3315483569840181346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_25
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 35
+        width: 39
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c7912f50bcf832b0800000000000000
+      internalID: -5604451901822101564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_26
+      rect:
+        serializedVersion: 2
+        x: 282
+        y: 35
+        width: 78
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 136375fb6f8bb4e20800000000000000
+      internalID: 3335963318909613617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_27
+      rect:
+        serializedVersion: 2
+        x: 1075
+        y: 29
+        width: 39
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7323edd5b3db7f2d0800000000000000
+      internalID: -3244916943821589961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_28
+      rect:
+        serializedVersion: 2
+        x: 1421
+        y: 35
+        width: 39
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81a97fce08e364840800000000000000
+      internalID: 5207918742552943128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_29
+      rect:
+        serializedVersion: 2
+        x: 2204
+        y: 29
+        width: 78
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82f165962bbeca470800000000000000
+      internalID: 8407353755897831208
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_button_background_long_30
+      rect:
+        serializedVersion: 2
+        x: 2359
+        y: 29
+        width: 39
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14c4dcc5c63ccff50800000000000000
+      internalID: 6916617997915081793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      ui_button_background_long_0: -7628287729480270791
+      ui_button_background_long_1: -8681002637868466154
+      ui_button_background_long_10: 5890785614773828090
+      ui_button_background_long_11: 2202668665949027637
+      ui_button_background_long_12: -7890369732650102671
+      ui_button_background_long_13: -4290104536346913240
+      ui_button_background_long_14: 2342129375492248695
+      ui_button_background_long_15: -1157474727719033285
+      ui_button_background_long_16: -3397501340876418649
+      ui_button_background_long_17: -813852584901183384
+      ui_button_background_long_18: -2338543262494712287
+      ui_button_background_long_19: 2526496079839327635
+      ui_button_background_long_2: -1008219566433778061
+      ui_button_background_long_20: -2971568193144310445
+      ui_button_background_long_21: 5865608006483383222
+      ui_button_background_long_22: -2059430601335584023
+      ui_button_background_long_23: 2549917785031459965
+      ui_button_background_long_24: -3315483569840181346
+      ui_button_background_long_25: -5604451901822101564
+      ui_button_background_long_26: 3335963318909613617
+      ui_button_background_long_27: -3244916943821589961
+      ui_button_background_long_28: 5207918742552943128
+      ui_button_background_long_29: 8407353755897831208
+      ui_button_background_long_3: -5511798551791251897
+      ui_button_background_long_30: 6916617997915081793
+      ui_button_background_long_4: -4883530760113719980
+      ui_button_background_long_5: 4096888843282157602
+      ui_button_background_long_6: 2491372978414729961
+      ui_button_background_long_7: -1950601280056193080
+      ui_button_background_long_8: -8532453111249040562
+      ui_button_background_long_9: -7267091219973659796
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
