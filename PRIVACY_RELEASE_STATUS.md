@@ -1,29 +1,44 @@
-# Privacy release preparation - 2026-10-24
+# Privacy release status - 2026-10-24
 
-Base: d7996a4d3d4018380b9b748325d5da2ebe241737. This status supplements README.md and DEVELOPMENT_PLAN.md; their older next-step statements are superseded by the pending tasks here. No new build or network test has been performed by the assistant.
+This status supersedes outdated privacy next steps in README.md and DEVELOPMENT_PLAN.md. No production release is authorized or claimed here.
 
-## Confirmed
-- User installed the internal version 1 (1.0) from Google Play and reported that it works. This is not a measured network/privacy test or a newly enumerated full checklist.
-- Play Console reports 16 KB support. The supplied AAB's seven arm64 ELF libraries also passed the static PT_LOAD alignment check. APK ZIP alignment and runtime testing on a 16 KB device were not performed here.
-- App setup is 9/11 according to user: store listing, category/contact, app access, ads, content rating, intended audience 13+, government, finance and health declarations completed. Privacy policy and Data safety remain open.
-- Console permissions: INTERNET, package-specific DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION, CHECK_LICENSE. The original AAB parser saw the first two uses-permission entries; the source of the added CHECK_LICENSE in Play-generated artifacts remains unverified.
-- Latest commit updates banner/screenshots, archives old images, enables AAB, and adds Recorder 5.1.7 plus OpenImageIO. Recorder is an Editor tool, not a player recorder. Preserve user images.
+## Source changes and static review
+- c247164 added privacy scripts, initial policy draft and this status.
+- a0ae89c applied the setup: PrivacyPolicyButton with OpenPolicy listener added to SampleScene; submitAnalytics changed from 1 to 0; com.unity.modules.unityanalytics removed from manifest and lock. Only the four expected files changed.
+- Reviewed all 12 files in Assets/Scripts. CarSequence saves CarWashASMR.CurrentCarIndex and SoundToggleUI saves CarWashASMR.SoundEnabled through PlayerPrefs. DirtCleaner processes input and texture data locally; partial cleaning is not persisted. PrivacyPolicyLink opens a fixed HTTPS URL without appending user or gameplay data. No gameplay network transmission calls found in these 12 files.
+- Current manifest has no directly declared Unity Ads, UGS Analytics, IAP or Firebase package. Legacy analytics module is absent. Recorder 5.1.7 remains for Editor capture. UnityWebRequest modules remain available; their presence alone does not establish that requests occur.
+- UnityConnectSettings: services, Insights/engine diagnostics, cloud crash reporting, purchasing, analytics, ads and performance reporting have disabled flags. Some serialized initialize-on-startup flags remain 1; they have NOT been changed or represented as 0.
+- Root Assets listing has no top-level Plugins folder. This is not a recursive binary/plugin audit. GitHub code search returned incomplete results; conclusions above use direct file reads, not an empty search result.
 
-## Prepared, NOT applied or tested
-- PrivacyPolicyLink opens the planned Pages URL; it has not been verified live.
-- Run Car Wash ASMR/Prepare Privacy Release ONCE with saved SampleScene outside Play Mode. It adds a bottom-right SafeArea button without moving existing UI, sets submitAnalytics to 0, and removes com.unity.modules.unityanalytics from manifest.json. Unity must regenerate packages-lock.json; do not hand-edit it. Existing analytics/diagnostics service flags remain disabled. This is a hardening change, not proof of no data collection.
-- New scripts require compilation and device testing. Scene layout is based on serialized coordinates, not a visual test.
-- docs/index.html is deliberately a DRAFT, not a completed compliance policy. Do not submit its URL or declare no collection yet.
+## User-reported build and functional testing
+- Android version 1.0, version code 2, AAB size 33.1 MB. User reports successful build without red Console errors.
+- User reports Play Console accepted code 2 / version 1.0 without errors or warnings; release distributed through internal testing and installed as an update.
+- User reports startup, cleaning, progress, Before/Next/Restart, sound, policy link, return from browser and offline gameplay work.
+- User reports GitHub Pages is enabled and the policy page is accessible.
 
-## User steps after Pull
-1. Let Unity compile. Open and save SampleScene; run the new privacy setup command once. Check Console and Git diff.
-2. Check that only expected scene, PlayerSettings, manifest and lock changes occurred. Keep signing key settings and package name. Never upload keystore/passwords.
-3. Configure repository Settings > Pages > Deploy from a branch > main > /docs; Save. Connector has no Pages administration tool. Publishing is a separate action. Verify the HTTPS URL without login; do not use a draft for Google Play.
-4. Confirm policy button layout, browser opening, no dirt removal for gestures started on it, and return-to-game behavior. The page requires internet; gameplay should remain offline.
-5. Choose a fresh Android Bundle Version Code greater than every uploaded code (at least 2 if 1 is the only used code); keep visible version 1.0 unless intentionally changing it. Build a signed non-development AAB with the existing upload key.
-6. Record source commit, SHA-256, version code and build results. Test the new build; old build 1 is NOT covered by these pending changes. Review manifest, built libraries and runtime network behavior before finalizing the policy and Data safety. No claim that settings alone guarantee absence of traffic.
-7. Resolve whether Google Play Games on PC should remain enabled; no PC compatibility is claimed.
-8. Finalize policy text only against verified release behavior, then remove the draft notice, verify public URL, and complete policy/Data safety declarations. Do not promote to production merely to change the unreviewed store appearance.
+## User-reported network observations
+- Tested installed Play build 1.0 (2) using PCAPdroid.
+- Gameplay session: browser control traffic visible before AND after gameplay in the same capture; Car Wash ASMR connections 0; Unknown absent.
+- Policy-link session: page opened, connections attributed only to Samsung Browser; Car Wash ASMR connections 0; Unknown absent.
+- These are the user's reports, not assistant-run captures. No packet file or screenshots were independently inspected. Evidence supports no detected app connections in those scenarios, not a universal guarantee about all devices, delays or paths.
 
-## Limits and privacy
-GitHub Pages logs visitors' IP addresses for security; website/browser processing must not be described as offline gameplay. No network capture, legal certification, full Git history secret scan, Unity run, or AAB signing validation was performed in this preparation. A local signing-key path is present in existing tracked settings; do not reproduce it in reports or replace key configuration blindly.
+## Policy and Data safety
+- docs/index.html now contains a final user-facing policy for Android 1.0 (2), replacing Draft. It distinguishes local gameplay, external browser/GitHub hosting, Android/Play processing and voluntary email support. Hosting IP logs are not described as offline gameplay.
+- Recommended Data safety answer for this reviewed release: no collection or sharing of the required user data types by the app. Local-only processing is excluded under Google's definition. This recommendation is based on the reviewed source/settings and the user's bounded tests, not legal certification.
+- Do not classify external-browser hosting as app telemetry solely because the policy button opens it. Reassess if user data is ever added to the link or an in-app webview/SDK is introduced.
+- No in-game account creation: no account deletion flow to invent. Support email remains a separate voluntary contact channel.
+- No independent security review/MASA certification has been performed; do not claim one.
+- Data safety submission in Console has NOT been completed by the assistant. Internal-only apps are exempt; complete accurate disclosures before closed/open/production distribution. Reassess every release active outside internal testing; do not extend the code-2 conclusion automatically to older or future builds.
+
+## Next tasks
+1. After Pages deploys this commit, verify the public page no longer says Draft and that developer/contact information is correct.
+2. Enter the final public policy URL in Play Console. Prepare Data safety answers for this release; save as draft and inspect the preview before submission. If Console asks additional questions, use their exact wording instead of guessing.
+3. Decide whether Google Play Games on PC should remain enabled; no PC compatibility is claimed.
+4. Check applicable account/testing/publication requirements separately before any production rollout. No extra AAB is required solely for this website/documentation change. Do not rerun Prepare Privacy Release.
+
+## Historical findings and remaining limits
+- Earlier build 1 (1.0) was installed successfully according to user; the privacy setup and new network test apply to build 2, not automatically to build 1.
+- Earlier AAB: seven arm64 ELF libraries passed static PT_LOAD alignment check and Play reported 16 KB support. APK ZIP alignment and runtime testing on a 16 KB device were not performed. These earlier binary findings have not been revalidated on the new AAB.
+- Earlier Console permissions: INTERNET, package-specific DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION and CHECK_LICENSE; the source of the added CHECK_LICENSE in Play-generated artifacts remains unverified. No new binary manifest analysis performed.
+- Current AAB could not be uploaded to the assistant. Contents, signing identity, hash and built dependency tree were not independently checked. No full Git history secret scan or legal certification performed.
+- Preserve user banners/screenshots and existing signing configuration. A local key path exists in tracked settings; do not reproduce it in reports, upload keys/passwords or change the signing identity blindly.
