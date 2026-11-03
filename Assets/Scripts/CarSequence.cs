@@ -8,20 +8,17 @@ using UnityEngine.UI;
 public class CarSequence : MonoBehaviour
 {
     private const string CurrentCarKey = "CarWashASMR.CurrentCarIndex";
-
     [Serializable]
     private class CarPair
     {
         public Sprite cleanSprite;
         public Sprite dirtSprite;
     }
-
     [SerializeField] private SpriteRenderer cleanRenderer;
     [SerializeField] private SpriteRenderer dirtRenderer;
     [SerializeField] private DirtCleaner dirtCleaner;
     [SerializeField] private Button nextButton;
     [SerializeField] private CarPair[] cars;
-
     private LevelRestart levelRestart;
     private CanvasGroup nextGroup;
     private int currentCarIndex;
@@ -32,33 +29,26 @@ public class CarSequence : MonoBehaviour
         if (nextButton != null)
         {
             nextGroup = nextButton.GetComponent<CanvasGroup>();
-            if (nextGroup == null)
-                nextGroup = nextButton.gameObject.AddComponent<CanvasGroup>();
+            if (nextGroup == null) nextGroup = nextButton.gameObject.AddComponent<CanvasGroup>();
             SetNextVisible(false);
         }
-
-        if (cleanRenderer == null || dirtRenderer == null ||
-            dirtCleaner == null || nextButton == null ||
-            cars == null || cars.Length == 0)
+        if (cleanRenderer == null || dirtRenderer == null || dirtCleaner == null ||
+            nextButton == null || cars == null || cars.Length == 0)
         {
             Debug.LogError("CarSequence: назначь компоненты и пары машин.", this);
             enabled = false;
             return;
         }
-
         for (int i = 0; i < cars.Length; i++)
-        {
-            if (cars[i] == null || cars[i].cleanSprite == null ||
-                cars[i].dirtSprite == null)
+            if (cars[i] == null || cars[i].cleanSprite == null || cars[i].dirtSprite == null)
             {
                 Debug.LogError($"CarSequence: не заполнена пара машины {i}.", this);
                 enabled = false;
                 return;
             }
-        }
-
         levelRestart = GetComponent<LevelRestart>();
-        currentCarIndex = Mathf.Clamp(
+        ShiftController shift = ShiftController.Instance;
+        currentCarIndex = Mathf.Clamp(shift != null ? shift.CurrentCarIndex :
             PlayerPrefs.GetInt(CurrentCarKey, 0), 0, cars.Length - 1);
         cleanRenderer.sprite = cars[currentCarIndex].cleanSprite;
         dirtRenderer.sprite = cars[currentCarIndex].dirtSprite;
@@ -66,16 +56,15 @@ public class CarSequence : MonoBehaviour
 
     private void LateUpdate()
     {
-        SetNextVisible(dirtCleaner.isActiveAndEnabled &&
-            dirtCleaner.IsCompleted && !transitionRequested);
+        ShiftController shift = ShiftController.Instance;
+        SetNextVisible(dirtCleaner.isActiveAndEnabled && dirtCleaner.IsCompleted &&
+            !transitionRequested && (shift == null || shift.CanRequestNextCar));
     }
 
     private void SetNextVisible(bool visible)
     {
-        if (nextButton != null)
-            nextButton.interactable = visible;
-        if (nextGroup == null)
-            return;
+        if (nextButton != null) nextButton.interactable = visible;
+        if (nextGroup == null) return;
         nextGroup.alpha = visible ? 1f : 0f;
         nextGroup.interactable = visible;
         nextGroup.blocksRaycasts = visible;
@@ -83,27 +72,29 @@ public class CarSequence : MonoBehaviour
 
     public void NextCar()
     {
-        if (!enabled || transitionRequested || !dirtCleaner.IsCompleted)
-            return;
-
+        if (!enabled || transitionRequested || !dirtCleaner.IsCompleted) return;
+        ShiftController shift = ShiftController.Instance;
+        if (shift != null && !shift.CanRequestNextCar) return;
         Scene scene = SceneManager.GetActiveScene();
-        if (string.IsNullOrEmpty(scene.path) ||
-            !Application.CanStreamedLevelBeLoaded(scene.path))
+        if (string.IsNullOrEmpty(scene.path) || !Application.CanStreamedLevelBeLoaded(scene.path))
         {
             Debug.LogError("CarSequence: текущая сцена отсутствует в Scene List.", this);
             return;
         }
-
+        int nextIndex = (currentCarIndex + 1) % cars.Length;
+        if (shift != null)
+        {
+            if (!shift.TryAdvanceCar(nextIndex)) return;
+        }
+        else
+        {
+            PlayerPrefs.SetInt(CurrentCarKey, nextIndex);
+            PlayerPrefs.Save();
+        }
         transitionRequested = true;
         SetNextVisible(false);
-        int nextIndex = (currentCarIndex + 1) % cars.Length;
-        PlayerPrefs.SetInt(CurrentCarKey, nextIndex);
-        PlayerPrefs.Save();
-        levelRestart.RestartLevel();
+        levelRestart.ReloadForNextCar();
     }
 
-    private void OnDisable()
-    {
-        SetNextVisible(false);
-    }
+    private void OnDisable() { SetNextVisible(false); }
 }

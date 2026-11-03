@@ -1,31 +1,36 @@
-# Timed shifts — implementation status
+# Timed shifts — 2026-11-03
 
-Updated: 2026-11-03, feature/timed-shifts. Design: DEVELOPMENT_PLAN.md. Stable main / released 1.0 (2) unchanged. This file refines stage 1, not the agreed scope.
+Branch feature/timed-shifts only; main/released 1.0 (2) unchanged. This status OVERRIDES the old hard cutoff in DEVELOPMENT_PLAN.md: user approved a final eligible car after closing on 3 November. No completed-shift saving yet.
 
-## Clock — user-confirmed substep
-- e0abb38 introduced ShiftController, ShiftClockUI and ShiftClockSetup. 06abce9 recorded visual feedback and future wall-clock design.
-- User accepted the interim white label below the hint. In response to the three explicit checks, user reported everything works: time continuity through Next, focus pause and one live controller after reload. No independent Unity/device execution by assistant; environment of this particular check not newly specified.
-- e0fef86 committed SampleScene: separate root ShiftController, 10–18 hours, 60-second test; clock at (0,-190), white, size 620x64/font 36, raycast off. Diff also changes one TMP style hash; no old gameplay code changed. This is confirmed source configuration, not an artifact hash.
-- Old clock setup still creates initial dark text at -240. Do NOT rerun it over accepted UI.
+## Confirmed history
+Clock source e0abb38; feedback 06abce9; scene e0fef86 with white clock at (0,-190), 10–18, 60-second test. User explicitly confirmed Next continuity, focus pause, one controller and accepted appearance. Counter source c397e5f; user said everything works after counter instructions, without an independently supplied capture or a newly enumerated device test. Counter scene changes remain local until user pushes; latest remote commit checked was c397e5f. Assistant has not compiled or executed Unity.
 
-## Prepared next substep — car count, NOT tested/installed yet
-- ShiftController keeps CarsWashed in memory, rebinds the single scene DirtCleaner after Single reload, and reads its existing IsCompleted in LateUpdate after cleaning Update. Current car is counted once per scene instance without waiting for Next; no new DirtCleaner event or duplicate cleaning logic. This is a small polling adapter using existing state, not the final end/save system.
-- Clock Update runs before gameplay Update. At/after clock closure no further cars are counted; already counted cars remain. A finish arriving in the closing frame is excluded. Count survives Next scene reload with the live controller; leaving Play/process resets it.
-- ShiftCounterUI displays Cars washed: N. Editor-only ShiftCounterSetup creates the label under SafeArea without moving clock/other UI.
-- Commit does not modify SampleScene, DirtCleaner, CarSequence, LevelRestart, old saves, packages, settings, public policy, store assets or main. Unity compile/layout/device tests remain pending.
+## Approved rule replacing hard cutoff
+At closing, snapshot ACTUAL CleaningProgress >= 0.01f on the unfinished current car, not rounded HUD percent. Qualifying car enters FinishingLastCar; clock stays at 18:00 indefinitely and only that same scene car can be completed. Next is prohibited. A completed current car is counted once and the shift ends immediately; an unfinished car below 1% does not count and shift ends immediately. Cannot earn eligibility by starting after closing. Final car is counted automatically on completion and summary follows without Next. No real-world overtime limit; frozen game clock does not limit physical session duration.
 
-## Local setup and tests
-1. On feature/timed-shifts, Fetch/Pull. Stop on red compilation errors. Outside Play, open and save SampleScene. Run ONLY Car Wash ASMR > Setup Shift Counter Prototype once, then save. No Inspector references need dragging. Existing clock/controller stay in place.
-2. Counter defaults: bottom centre (0,260), 620x64, font 36, white, Raycast Target off. Layout not independently tested; inspect on the accepted portrait view and report overlap. Do not redraw garage or rerun old setup commands.
-3. Temporarily use Shift Duration Seconds 120 outside Play so two car washes fit comfortably; this is a test value, not balance. Save scene. Expected start Cars washed: 0. Complete first car BEFORE 18:00: becomes 1 without Next. Wait/hold Before: stays 1. Next: stays 1 and clock continues. Complete second car: becomes 2.
-4. Let time expire before cleaning another car; finish it AFTER 18:00: count must stay frozen. Gameplay is deliberately not blocked yet. Boundary and focus behavior must be tested, not assumed from code.
-5. Exit/reenter Play: count/time reset; sound setting remains as before. Check clock, focus pause, one live controller, cleaning, sound, HUD and policy still work. Do not change script execution-order settings.
-6. Existing Restart temporarily repeats a car without resetting time/count and can therefore count a newly washed scene instance again. Do not use Restart as a shift feature or publish this prototype. Its whole-shift confirmation/reset is still required in stage 1. Existing CarSequence still writes old car-index PlayerPrefs; removing that belongs to the upcoming coordinated transition, not a completed new save system.
+## Prepared code — untested until user confirms
+- ShiftController: Working / FinishingLastCar / Finished; identity-bound last car, count, focus/input pause, immediate audio stop at blocking points, summary state and restart confirmation. Scene reload during overtime does not grant eligibility to another instance.
+- CarSequence: refuses Next after admission closes; uses in-memory CurrentCarIndex with controller. No old car-index PlayerPrefs writes during shift mode. Legacy fallback only when no controller. Old keys not deleted; sound saving unchanged. New shifts start at first car; random selection still later.
+- LevelRestart: Restart requests whole-shift confirmation; Next uses separate ReloadForNextCar. Cancel resumes same time/car/count; confirm resets all in-memory shift progress and reloads. Restart during overtime abandons the whole old shift rather than swapping the last car.
+- ShiftClockUI: time plus Finish this car / Shift ended / Paused; accepted white color and position stay in scene. ShiftCounterUI unchanged.
+- ShiftEndUI/ShiftEndSetup: modal summary and restart confirmation, built from existing TMP font without new art. Only new root is added locally by setup. No existing UI moved; no direct remote scene modification.
+- Source change does not include DirtCleaner, CleaningAudio, BeforeAfterPreview, packages, settings, public policy, store assets or main. Existing audio stops when controller disables cleaning; extra immediate stop is applied.
 
-## Future decorative clock — user requested, not implemented
-Wall-mounted digital clock housing in the garage; digits use SAME ShiftController time. Agree art/typeface later without automatic paid assets/SDKs. Preserve accepted background/UI. Account for camera crop, safe area and portrait sizes; no cleaning input interception. Implement after core shift count/end/summary/save work. Interim white label remains.
+## Apply locally
+1. Save local scene and Fetch/Pull on feature/timed-shifts. Stop on compilation errors. Do not discard local counter objects.
+2. Outside Play, open/save SampleScene. Run ONLY Car Wash ASMR > Setup Shift End UI once. It requires existing clock/counter/controller. Save. New SafeArea/ShiftEndRoot contains inactive Panel; ShiftEndUI must stay on the active root outside Panel. All serialized fields wired by setup. Do not rerun clock/counter setup.
+3. Keep 120 seconds for normal tests. For quick deadline cases use 15–30 seconds outside Play; restore 120 afterward. No final balance claimed.
 
-## Remaining work
-After counter checks pass: end-of-shift input/audio blocking, summary and confirmed whole-shift Restart. Then completed-shift saves/migration, random selection, third car, balance and full internal regression. No earnings yet. Core-shift closure is not complete just because clock/count freeze.
+## Required tests
+- 0% at closing -> immediate summary with no extra car; input/sound stop, Next inaccessible.
+- Some progress but actual <1% at closing -> same. Rounded percent alone is not an exact threshold test.
+- Clearly >1% and unfinished before closing -> Finish this car, time frozen, clean/sound continue; no Next. Finish -> exactly +1, summary automatically. Wait -> no double count.
+- 97% before closing -> can finish; fully clean before closing -> counted once, summary at closing, not an extra entitlement.
+- Next before closing to a fresh 0% car -> fresh car does not qualify. No cleaning after closing may turn an ineligible car into an eligible one.
+- Restart before closing AND during overtime: confirmation pauses clock/cleaning; cancel restores same session; confirm resets time/count/car. No extra machine in same overtime shift.
+- Next shift on summary -> new 10:00/count 0/first car, one controller, no stuck disabled cleaner. Rapid clicks do not create multiple reloads.
+- Focus/browser pause, UI gesture exclusion, sound setting, Before, counter continuity and one controller remain correct. In Finished cleaner is disabled so Before/Next hide via existing checks.
+- Summary is session-only: no completed totals or money written. Closing app/Play loses unsaved shift. Public policy/store must be reviewed for a future release; do not publish this development branch.
 
-Record explicit user results only. Review/push expected local scene changes on this branch; no main merge, AAB release or production rollout now.
+## Next
+Fix errors before adding features. After explicit acceptance, push local scene and review. Then completed-shift save/migration, random selection, third car, balancing and internal regression. Decorative wall-mounted digital clock remains planned after core systems, using SAME time source, no automatic paid assets/fonts. No production or merge into main here.
