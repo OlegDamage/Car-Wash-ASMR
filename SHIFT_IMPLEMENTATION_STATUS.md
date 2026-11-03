@@ -1,27 +1,32 @@
 # Timed shifts — implementation status
 
-Prepared: 2026-11-03, feature/timed-shifts, base 047657e. This branch-specific status refines the planned first stage in DEVELOPMENT_PLAN.md; it does not supersede the agreed design or change the released 1.0 (2).
+Updated: 2026-11-03, feature/timed-shifts. Design: DEVELOPMENT_PLAN.md. Stable baseline: main / 1.0 (2). This branch-specific status refines the first stage; future features are not installed merely because they are documented.
 
-## First substep: isolated work clock
-Files prepared: ShiftController, ShiftClockUI, Editor-only ShiftClockSetup and their metas. Existing gameplay scripts, SampleScene, README, policy, store descriptions, packages and ProjectSettings unchanged by this commit. The scene is changed locally only when the new command is run.
+## Prepared source and local application
+- e0abb38 added ShiftController, ShiftClockUI, Editor-only ShiftClockSetup, metas and this document. No existing gameplay script, scene, package, policy, store description or ProjectSettings was changed by that commit.
+- User fetched the branch and applied the setup locally, as evidenced by their report and screenshot of the clock. No assistant-run Unity compilation or device test is claimed.
+- User said the clock works; screenshot shows 18:00 | Clock ended. This confirms reported operation and visible end display, NOT an explicitly completed checklist for Next continuity, pause, duplicate prevention or Android behavior. Those remain to verify.
 
-No Unity compilation, Editor execution, device test or successful local installation is claimed. These classes now have prepared source files; the older plan's statements about not-created classes describe the pre-implementation baseline. No counting, earnings, shift summary, save or new car is implemented in this substep.
+## Current visual issue and small local fix
+- Screenshot shows dark clock text crossing the bright wall lamp; poor contrast/background competition, not established evidence of incorrect Canvas sorting. Do not change sorting or redraw the garage based on this screenshot.
+- User requests slightly higher placement directly below the hint and white text.
+- Outside Play Mode select Canvas/SafeArea/ShiftClock. Initial proposed RectTransform values: Pos X 0, Pos Y -190 (was -240); preserve anchors, pivot, width 620 and height 64. Set TextMeshProUGUI Vertex Color to opaque white (#FFFFFFFF); keep font size 36 and Raycast Target disabled. This placement is an unverified starting point for the shown layout; inspect all hint states and adjust only this label if needed. Save scene.
+- Changes to the scene/appearance are NOT yet confirmed applied or pushed. Source setup still creates the old dark label at -240; do NOT rerun setup to apply this fix. Existing label is edited in Inspector.
 
-## Local setup
-1. Confirm GitHub Desktop is on feature/timed-shifts, Fetch/Pull this commit. Stop on compilation errors.
-2. Outside Play Mode, open Assets/Scenes/SampleScene.unity and save it. Run Car Wash ASMR > Setup Shift Clock Prototype ONCE. Do not rerun old setup commands.
-3. The command creates a separate root ShiftController and SafeArea/ShiftClock. Existing UI is not moved. Inspect placement: initial clock anchor top-centre, position (0,-240), size 620x64 in Canvas reference units. This placement has not been visually tested. If it overlaps, move only ShiftClock or report a screenshot; do not redo the garage. Save the scene.
-4. Root ShiftController Inspector: Start Hour 10, End Hour 18, Shift Duration Seconds 60 for a short test. Default/future balance hypothesis is 300, not calibrated. Set values OUTSIDE Play Mode. No fields need dragging; the label resolves the active controller.
+## Future presentation — user requested, not implemented
+Add a decorative wall-mounted digital clock in the garage, with the digits visually inside its housing rather than a floating HUD label. It must display the SAME ShiftController time, not run a second timer. Agree housing/art and digital typeface when this visual task starts; do not add paid assets, fonts or SDKs automatically. Keep the current garage and accepted UI; assess position/scale alongside camera crop, safe area and supported portrait formats. The clock must not intercept cleaning input.
 
-## Checks
-- Enter Play, focus Game view: starts at 10:00 and reaches 18:00 after approximately 60 active seconds; then displays Clock ended and stops advancing. At 30 active seconds it should be near 14:00. Time is measured in foreground, independent of Time.timeScale. First/resume frame is skipped to avoid charging background time.
-- Complete a car and press Next before closing time: old car-selection behavior remains, but clock must not reset. After reload exactly one live ShiftController remains under DontDestroyOnLoad and the new label uses it. Duplicate scene controller destroys only its own root. Do not attach controller to Canvas/GameManager.
-- Alt-Tab or focus another application for 10 seconds, return to Game: time should not jump by those 10 seconds. Android browser/focus behavior requires a later on-device check. Existing audio is NOT yet coordinated by this clock.
-- Exit and reenter Play: fresh clock. Fully stopping the app does not save clock progress. No PlayerPrefs calls added.
-- Existing cleaning, HUD, sound and policy button must still work. Clock label raycast is off.
-- Restart STILL reloads the current car and preserves clock, just like Next preserves clock. This temporary behavior is NOT the agreed final Restart. After closing time gameplay STILL runs: only the isolated clock ends. Do not publish this intermediate prototype or describe it as a completed shift.
+Implement after core shift counting, end/summary and save behavior work. No new decorative art or digital font is created by this documentation change. Current white text is an interim readability fix.
 
-After this substep passes, integrate counting, end-of-shift input/audio blocking, summary and Restart confirmation as the remainder of stage 1. Then completed-shift saving, random selection, third car and balancing follow the existing plan. No new feature is confirmed installed until user reports it.
+## Remaining checks for clock substep
+- Outside Play Mode: root ShiftController Start Hour 10, End Hour 18, Shift Duration Seconds 60 for short test (default/future balance hypothesis 300). Do not attach controller to Canvas/GameManager.
+- Enter Play and focus Game: start 10:00, around 14:00 after 30 foreground seconds, stop at 18:00 around 60 seconds. First/resume frame skipped, time independent of Time.timeScale.
+- Complete a car and press Next: clock must continue rather than reset. Exactly one live ShiftController under DontDestroyOnLoad after reload.
+- Switch to another application for 10 seconds: after return clock must not jump by background duration. Android browser/focus still requires a later on-device test.
+- Exit/reenter Play: fresh clock. Existing cleaning, progress, sound and policy must continue working. No new PlayerPrefs calls.
+- Existing audio is NOT yet coordinated with clock pause. Restart temporarily repeats the current car without resetting clock. After 18:00 only clock stops; gameplay continues. No count, shift summary, shift save, earnings, random choice or third car yet. Do not publish this intermediate prototype.
 
-## Recording results
-User should report compilation, layout, Next continuity, one live controller, focus pause and stopping at 18:00. If an error occurs fix it before proceeding. Save and push only expected scene/meta changes on feature/timed-shifts after review; no main merge or AAB release now.
+## Next work
+Finish visual fix and outstanding clock checks before adding functionality. Then complete stage 1: machine count, end-of-shift input/audio blocking, summary and confirmed full-shift Restart. Completed-shift saving, random choice, third car and balance follow DEVELOPMENT_PLAN.md.
+
+Record only explicit user results. Save/push expected scene/meta changes on feature/timed-shifts after review. No merge into main, production rollout or AAB release now. Do not rerun old Setup commands.
