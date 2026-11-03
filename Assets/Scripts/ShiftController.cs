@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [DefaultExecutionOrder(-200)]
 public class ShiftController : MonoBehaviour
@@ -13,7 +14,10 @@ public class ShiftController : MonoBehaviour
     private bool focused;
     private bool paused;
     private bool skipNextFrame = true;
+    private DirtCleaner currentCleaner;
+    private bool currentCarCounted;
 
+    public int CarsWashed { get; private set; }
     public bool IsFinished => elapsedSeconds >= shiftDurationSeconds;
     public bool IsPaused => !focused || paused;
     public int CurrentMinute
@@ -52,6 +56,41 @@ public class ShiftController : MonoBehaviour
         Instance = this;
         focused = Application.isFocused;
         DontDestroyOnLoad(gameObject);
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void Start()
+    {
+        if (Instance == this && currentCleaner == null)
+            BindCleaner(SceneManager.GetActiveScene());
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (Instance == this && mode == LoadSceneMode.Single)
+            BindCleaner(scene);
+    }
+
+    private void BindCleaner(Scene scene)
+    {
+        currentCleaner = null;
+        currentCarCounted = false;
+        if (scene.path != "Assets/Scenes/SampleScene.unity")
+            return;
+        int count = 0;
+        foreach (GameObject root in scene.GetRootGameObjects())
+        {
+            foreach (DirtCleaner cleaner in root.GetComponentsInChildren<DirtCleaner>(true))
+            {
+                currentCleaner = cleaner;
+                count++;
+            }
+        }
+        if (count != 1)
+        {
+            currentCleaner = null;
+            Debug.LogError("ShiftController: expected exactly one DirtCleaner in SampleScene. Counting disabled for this scene.", this);
+        }
     }
 
     private void Update()
@@ -66,7 +105,18 @@ public class ShiftController : MonoBehaviour
         elapsedSeconds = System.Math.Min(shiftDurationSeconds,
             elapsedSeconds + Time.unscaledDeltaTime);
         if (IsFinished)
-            Debug.Log("Shift clock reached closing time. Gameplay integration is pending.", this);
+            Debug.Log("Shift clock reached closing time. Car count frozen; gameplay blocking is pending.", this);
+    }
+
+    private void LateUpdate()
+    {
+        if (Instance != this || IsPaused || IsFinished || currentCarCounted ||
+            currentCleaner == null || !currentCleaner.isActiveAndEnabled ||
+            !currentCleaner.IsCompleted)
+            return;
+        currentCarCounted = true;
+        CarsWashed++;
+        Debug.Log($"Shift: washed cars = {CarsWashed}", this);
     }
 
     private void OnApplicationFocus(bool hasFocus)
@@ -98,6 +148,7 @@ public class ShiftController : MonoBehaviour
 
     private void OnDestroy()
     {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
         if (Instance == this)
             Instance = null;
     }
