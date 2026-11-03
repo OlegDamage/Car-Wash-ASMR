@@ -48,8 +48,8 @@ public class CarSequence : MonoBehaviour
             }
         levelRestart = GetComponent<LevelRestart>();
         ShiftController shift = ShiftController.Instance;
-        currentCarIndex = Mathf.Clamp(shift != null ? shift.CurrentCarIndex :
-            PlayerPrefs.GetInt(CurrentCarKey, 0), 0, cars.Length - 1);
+        currentCarIndex = shift != null ? shift.GetOrSelectCarIndex(cars.Length) :
+            Mathf.Clamp(PlayerPrefs.GetInt(CurrentCarKey, 0), 0, cars.Length - 1);
         cleanRenderer.sprite = cars[currentCarIndex].cleanSprite;
         dirtRenderer.sprite = cars[currentCarIndex].dirtSprite;
     }
@@ -81,7 +81,7 @@ public class CarSequence : MonoBehaviour
             Debug.LogError("CarSequence: текущая сцена отсутствует в Scene List.", this);
             return;
         }
-        int nextIndex = (currentCarIndex + 1) % cars.Length;
+        int nextIndex = CarSelection.Choose(cars.Length, currentCarIndex);
         if (shift != null)
         {
             if (!shift.TryAdvanceCar(nextIndex)) return;

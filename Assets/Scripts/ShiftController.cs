@@ -21,10 +21,11 @@ public class ShiftController : MonoBehaviour
     private bool currentCarCounted;
     private string currentResultId;
     private ShiftSave.Statistics savedStatistics;
+    private int lastShownCarIndex = -1;
 
     public ShiftState State { get; private set; }
     public int CarsWashed { get; private set; }
-    public int CurrentCarIndex { get; private set; }
+    public int CurrentCarIndex { get; private set; } = -1;
     public bool RestartConfirmationRequested { get; private set; }
     public bool IsResultSaved { get; private set; }
     public bool HasSavedStatistics => savedStatistics != null;
@@ -70,6 +71,14 @@ public class ShiftController : MonoBehaviour
         else Debug.LogError($"Shift save could not be loaded: {error}", this);
         DontDestroyOnLoad(gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    public int GetOrSelectCarIndex(int carCount)
+    {
+        if (CurrentCarIndex < 0 || CurrentCarIndex >= carCount)
+            CurrentCarIndex = CarSelection.Choose(carCount, lastShownCarIndex);
+        lastShownCarIndex = CurrentCarIndex;
+        return CurrentCarIndex;
     }
 
     private void Start()
@@ -232,7 +241,7 @@ public class ShiftController : MonoBehaviour
         ApplyInputState();
         elapsedSeconds = 0d;
         CarsWashed = 0;
-        CurrentCarIndex = 0;
+        CurrentCarIndex = -1;
         currentCarCounted = false;
         overtimeCleaner = null;
         RestartConfirmationRequested = false;
