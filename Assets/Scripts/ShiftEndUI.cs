@@ -42,8 +42,8 @@ public class ShiftEndUI : MonoBehaviour
     private void LateUpdate()
     {
         ShiftController shift = ShiftController.Instance;
-        int mode = shift == null ? 0 : shift.IsFinished ? 2 :
-            shift.RestartConfirmationRequested ? 1 : 0;
+        int mode = shift == null ? 0 : shift.IsFinished ?
+            (shift.IsResultSaved ? 2 : 3) : shift.RestartConfirmationRequested ? 1 : 0;
         int count = shift == null ? 0 : shift.CarsWashed;
         if (mode == lastMode && count == lastCount) return;
         lastMode = mode;
@@ -51,15 +51,30 @@ public class ShiftEndUI : MonoBehaviour
         panel.SetActive(mode != 0);
         if (mode == 0) return;
         panel.transform.SetAsLastSibling();
-        message.text = mode == 2 ? $"Shift finished\nCars washed: {count}\nSession result only - saving comes next" :
-            "Restart the whole shift?\nCurrent shift progress will be lost.";
-        confirmLabel.text = mode == 2 ? "Next shift" : "Restart shift";
+        if (mode == 2)
+        {
+            message.text = $"Shift finished\nCars washed: {count}\nSaved shifts: {shift.CompletedShifts}\nTotal cars: {shift.TotalCarsWashed}";
+            confirmLabel.text = "Next shift";
+        }
+        else if (mode == 3)
+        {
+            message.text = $"Shift finished - cars: {count}\nSaving failed. Result is still in memory.\nCheck Console and retry before leaving.";
+            confirmLabel.text = "Retry save";
+        }
+        else
+        {
+            message.text = "Restart the whole shift?\nCurrent shift progress will be lost.";
+            confirmLabel.text = "Restart shift";
+        }
         cancelButton.gameObject.SetActive(mode == 1);
     }
 
     private void Confirm()
     {
-        if (ShiftController.Instance != null) ShiftController.Instance.StartNewShift();
+        ShiftController shift = ShiftController.Instance;
+        if (shift == null) return;
+        if (shift.IsFinished && !shift.IsResultSaved) shift.TrySaveCompletedResult();
+        else shift.StartNewShift();
     }
     private void Cancel()
     {

@@ -19,11 +19,18 @@ public class ShiftController : MonoBehaviour
     private DirtCleaner overtimeCleaner;
     private bool cleanerInitiallyEnabled;
     private bool currentCarCounted;
+    private string currentResultId;
+    private ShiftSave.Statistics savedStatistics;
 
     public ShiftState State { get; private set; }
     public int CarsWashed { get; private set; }
     public int CurrentCarIndex { get; private set; }
     public bool RestartConfirmationRequested { get; private set; }
+    public bool IsResultSaved { get; private set; }
+    public bool HasSavedStatistics => savedStatistics != null;
+    public int CompletedShifts => savedStatistics == null ? 0 : savedStatistics.completedShifts;
+    public long TotalCarsWashed => savedStatistics == null ? 0 : savedStatistics.totalCars;
+    public int LastSavedShiftCars => savedStatistics == null ? 0 : savedStatistics.lastShiftCars;
     public bool IsFinished => State == ShiftState.Finished;
     public bool IsPaused => !focused || paused || RestartConfirmationRequested;
     public bool CanRequestNextCar => State == ShiftState.Working && !IsPaused && !loading;
@@ -54,6 +61,13 @@ public class ShiftController : MonoBehaviour
         ValidateSettings();
         Instance = this;
         focused = Application.isFocused;
+        currentResultId = System.Guid.NewGuid().ToString("N");
+        if (ShiftSave.TryLoad(out ShiftSave.Statistics data, out string error))
+        {
+            savedStatistics = data;
+            Debug.Log($"Shift save loaded: shifts={CompletedShifts}, total cars={TotalCarsWashed}, last shift={LastSavedShiftCars}", this);
+        }
+        else Debug.LogError($"Shift save could not be loaded: {error}", this);
         DontDestroyOnLoad(gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
@@ -143,10 +157,25 @@ public class ShiftController : MonoBehaviour
 
     private void FinishShift()
     {
+        if (IsFinished) return;
         State = ShiftState.Finished;
         overtimeCleaner = null;
         RestartConfirmationRequested = false;
         ApplyInputState();
+        TrySaveCompletedResult();
+    }
+
+    public void TrySaveCompletedResult()
+    {
+        if (!IsFinished || IsResultSaved) return;
+        if (ShiftSave.TryCommit(currentResultId, CarsWashed,
+            out ShiftSave.Statistics data, out string error))
+        {
+            savedStatistics = data;
+            IsResultSaved = true;
+            Debug.Log($"Shift saved: shifts={CompletedShifts}, total cars={TotalCarsWashed}, last shift={LastSavedShiftCars}", this);
+        }
+        else Debug.LogError($"Shift save failed. Result is still in memory; use Retry save. {error}", this);
     }
 
     private void ApplyInputState()
@@ -187,6 +216,11 @@ public class ShiftController : MonoBehaviour
     public void StartNewShift()
     {
         if (loading || (!IsFinished && !RestartConfirmationRequested)) return;
+        if (IsFinished && !IsResultSaved)
+        {
+            TrySaveCompletedResult();
+            if (!IsResultSaved) return;
+        }
         Scene scene = SceneManager.GetActiveScene();
         if (scene.path != "Assets/Scenes/SampleScene.unity" ||
             !Application.CanStreamedLevelBeLoaded(scene.path))
@@ -202,6 +236,8 @@ public class ShiftController : MonoBehaviour
         currentCarCounted = false;
         overtimeCleaner = null;
         RestartConfirmationRequested = false;
+        IsResultSaved = false;
+        currentResultId = System.Guid.NewGuid().ToString("N");
         State = ShiftState.Working;
         skipNextFrame = true;
         SceneManager.LoadScene(scene.path, LoadSceneMode.Single);
@@ -209,10 +245,8 @@ public class ShiftController : MonoBehaviour
 
     private void OnApplicationFocus(bool hasFocus)
     { focused = hasFocus; skipNextFrame = true; ApplyInputState(); }
-
     private void OnApplicationPause(bool isPaused)
     { paused = isPaused; skipNextFrame = true; ApplyInputState(); }
-
     private void OnValidate() { ValidateSettings(); }
 
     private void ValidateSettings()
