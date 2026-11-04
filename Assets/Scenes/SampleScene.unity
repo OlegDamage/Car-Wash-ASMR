@@ -1360,7 +1360,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShiftController
   startHour: 10
   endHour: 18
-  shiftDurationSeconds: 120
+  shiftDurationSeconds: 300
 --- !u!4 &413581852
 Transform:
   m_ObjectHideFlags: 0
